@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h1>Todo List</h1>
+    <h3>Welcome {{username}}</h3>
+    <form method="POST" action="{% url 'add_todo' %}">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="task">Task</label>
+        <input type="text" class="form-control" id="task" name="task" placeholder="Enter a new task">
+      </div>
+      <button type="submit" class="btn btn-primary">Add Task</button>
+    </form>
+    <table class="table mt-5">
+      <thead>
+        <tr>
+          <th>Task</th>
+          <th>Completed</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for todo in todos %}
+          <tr>
+            <td>{{ todo.task }}</td>
+            <td>{{ todo.completed }}</td>
+            <td class="d-flex">
+              <form method="POST" action="{% url 'complete_todo' todo.id %}" class="mx-2">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">Mark as Completed</button>
+              </form>
+              <form method="POST" action="{% url 'delete_todo' todo.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Delete</button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+
